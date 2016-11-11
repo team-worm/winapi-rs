@@ -232,14 +232,14 @@ STRUCT!{nodebug struct DEBUG_EVENT {
     dwDebugEventCode: ::DWORD,
     dwProcessId: ::DWORD,
     dwThreadId: ::DWORD,
-    u: [u8; 160],
+    u: [u64; 20],
 }}
 #[cfg(target_arch="x86")]
 STRUCT!{nodebug struct DEBUG_EVENT {
     dwDebugEventCode: ::DWORD,
     dwProcessId: ::DWORD,
     dwThreadId: ::DWORD,
-    u: [u8; 84],
+    u: [u32; 21],
 }}
 UNION!(DEBUG_EVENT, u, Exception, Exception_mut, EXCEPTION_DEBUG_INFO);
 UNION!(DEBUG_EVENT, u, CreateThread, CreateThread_mut, CREATE_THREAD_DEBUG_INFO);
