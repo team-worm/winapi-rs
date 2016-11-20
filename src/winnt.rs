@@ -682,6 +682,9 @@ STRUCT!{nodebug struct CONTEXT {
 pub type XMM_SAVE_AREA32 = XSAVE_FORMAT;
 pub type PXMM_SAVE_AREA32 = *mut XSAVE_FORMAT;
 // FIXME - Align 16
+#[repr(simd)]
+#[derive(Copy, Clone)]
+pub struct Align16(u64, u64);
 #[cfg(target_arch = "x86_64")]
 STRUCT!{nodebug struct CONTEXT {
     P1Home: ::DWORD64,
@@ -730,6 +733,7 @@ STRUCT!{nodebug struct CONTEXT {
     LastBranchFromRip: ::DWORD64,
     LastExceptionToRip: ::DWORD64,
     LastExceptionFromRip: ::DWORD64,
+    _align16: [Align16; 0],
 }}
 pub type PCONTEXT = *mut CONTEXT;
 #[test]
