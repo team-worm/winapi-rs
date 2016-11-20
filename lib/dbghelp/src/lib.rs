@@ -123,7 +123,10 @@ extern "system" {
     // pub fn SymEnumSymbolsExW();
     // pub fn SymEnumSymbolsForAddr();
     // pub fn SymEnumSymbolsForAddrW();
-    // pub fn SymEnumSymbolsW();
+    pub fn SymEnumSymbolsW(
+        hProcess: HANDLE, BaseOfDll: ULONG64, Mask: PCWSTR,
+        EnumSymbolsCallback: PSYM_ENUMERATESYMBOLS_CALLBACKW, UserContext: PVOID,
+    ) -> BOOL;
     // pub fn SymEnumTypes();
     // pub fn SymEnumTypesByName();
     // pub fn SymEnumTypesByNameW();
@@ -201,7 +204,7 @@ extern "system" {
     // pub fn SymGetModuleInfoW();
     // pub fn SymGetModuleInfoW64();
     // pub fn SymGetOmaps();
-    // pub fn SymGetOptions();
+    pub fn SymGetOptions() -> DWORD;
     // pub fn SymGetScope();
     // pub fn SymGetScopeW();
     // pub fn SymGetSearchPath();
@@ -236,7 +239,10 @@ extern "system" {
     // pub fn SymLoadModule();
     // pub fn SymLoadModule64();
     // pub fn SymLoadModuleEx();
-    // pub fn SymLoadModuleExW();
+    pub fn SymLoadModuleExW(
+        hProcess: HANDLE, hFile: HANDLE, ImageName: PCWSTR, ModuleName: PCWSTR, BaseOfDll: DWORD64,
+        DllSize: DWORD, Data: PMODLOAD_DATA, Flags: DWORD
+    ) -> DWORD64;
     // pub fn SymMatchFileName();
     // pub fn SymMatchFileNameW();
     // pub fn SymMatchString();
@@ -255,10 +261,12 @@ extern "system" {
     // pub fn SymRegisterFunctionEntryCallback64();
     // pub fn SymSearch();
     // pub fn SymSearchW();
-    // pub fn SymSetContext();
+    pub fn SymSetContext(
+        hProcess: HANDLE, StackFrame: PIMAGEHLP_STACK_FRAME, Context: PIMAGEHLP_CONTEXT
+    ) -> BOOL;
     // pub fn SymSetHomeDirectory();
     // pub fn SymSetHomeDirectoryW();
-    // pub fn SymSetOptions();
+    pub fn SymSetOptions(SymOptions: DWORD) -> DWORD;
     // pub fn SymSetParentWindow();
     // pub fn SymSetScopeFromAddr();
     // pub fn SymSetScopeFromIndex();
@@ -284,7 +292,7 @@ extern "system" {
     // pub fn SymUnDName();
     // pub fn SymUnDName64();
     // pub fn SymUnloadModule();
-    // pub fn SymUnloadModule64();
+    pub fn SymUnloadModule64(hProcess: HANDLE, BaseOfDll: DWORD64) -> BOOL;
     pub fn UnDecorateSymbolName(
         name: PCSTR, outputString: PSTR, maxStringLength: DWORD, flags: DWORD,
     ) -> DWORD;
