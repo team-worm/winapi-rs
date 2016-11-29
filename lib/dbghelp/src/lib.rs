@@ -172,7 +172,7 @@ extern "system" {
     // pub fn SymFromInlineContext();
     // pub fn SymFromInlineContextW();
     // pub fn SymFromName();
-    // pub fn SymFromNameW();
+    pub fn SymFromNameW(hProcess: HANDLE, Name: PCWSTR, Symbol: PSYMBOL_INFOW) -> BOOL;
     // pub fn SymFromToken();
     // pub fn SymFromTokenW();
     // pub fn SymFunctionTableAccess();
@@ -193,7 +193,7 @@ extern "system" {
     // pub fn SymGetLineFromNameW64();
     // pub fn SymGetLineNext();
     // pub fn SymGetLineNext64();
-    // pub fn SymGetLineNextW64();
+    pub fn SymGetLineNextW64(hProcess: HANDLE, Line: PIMAGEHLP_LINEW64) -> BOOL;
     // pub fn SymGetLinePrev();
     // pub fn SymGetLinePrev64();
     // pub fn SymGetLinePrevW64();
