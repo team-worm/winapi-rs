@@ -302,6 +302,42 @@ STRUCT!{struct API_VERSION {
     Revision: ::USHORT,
     Reserved: ::USHORT,
 }}
+pub type LPAPI_VERSION = *mut API_VERSION;
+ENUM!{enum SymTag {
+    SymTagNull,
+    SymTagExe,
+    SymTagCompiland,
+    SymTagCompilandDetails,
+    SymTagCompilandEnv,
+    SymTagFunction,
+    SymTagBlock,
+    SymTagData,
+    SymTagAnnotation,
+    SymTagLabel,
+    SymTagPublicSymbol,
+    SymTagUDT,
+    SymTagEnum,
+    SymTagFunctionType,
+    SymTagPointerType,
+    SymTagArrayType,
+    SymTagBaseType,
+    SymTagTypedef,
+    SymTagBaseClass,
+    SymTagFriend,
+    SymTagFunctionArgType,
+    SymTagFuncDebugStart,
+    SymTagFuncDebugEnd,
+    SymTagUsingNamespace,
+    SymTagVTableShape,
+    SymTagVTable,
+    SymTagCustom,
+    SymTagThunk,
+    SymTagCustomType,
+    SymTagManagedType,
+    SymTagDimension,
+    SymTagCallSite,
+    SymTagMax,
+}}
 pub const SYMFLAG_VALUEPRESENT: ::ULONG = 0x00000001;
 pub const SYMFLAG_REGISTER: ::ULONG = 0x00000008;
 pub const SYMFLAG_REGREL: ::ULONG = 0x00000010;
@@ -323,43 +359,19 @@ pub const SYMFLAG_NULL: ::ULONG = 0x00080000;
 pub const SYMFLAG_FUNC_NO_RETURN: ::ULONG = 0x00100000;
 pub const SYMFLAG_SYNTHETIC_ZEROBASE: ::ULONG = 0x00200000;
 pub const SYMFLAG_PUBLIC_CODE: ::ULONG = 0x00400000;
-pub type LPAPI_VERSION = *mut API_VERSION;
-STRUCT!{struct SYMBOL_INFOW {
-    SizeOfStruct: ::ULONG,
-    TypeIndex: ::ULONG,
-    Reserved: [::ULONG64; 2],
-    Index: ::ULONG,
-    Size: ::ULONG,
-    ModBase: ::ULONG64,
-    Flags: ::ULONG,
-    Value: ::ULONG64,
-    Address: ::ULONG64,
-    Register: ::ULONG,
-    Scope: ::ULONG,
-    Tag: ::ULONG,
-    NameLen: ::ULONG,
-    MaxNameLen: ::ULONG,
-    Name: [::WCHAR; 1],
+pub const SYMFLAG_RESET: ::ULONG = 0x80000000;
+ENUM!{enum SYM_TYPE {
+    SymNone,
+    SymCoff,
+    SymCv,
+    SymPdb,
+    SymExport,
+    SymDeferred,
+    SymSym,
+    SymDia,
+    SymVirtual,
+    NumSymTypes,
 }}
-STRUCT!{struct IMAGEHLP_STACK_FRAME {
-    InstructionOffset: ::ULONG64,
-    ReturnOffset: ::ULONG64,
-    FrameOffset: ::ULONG64,
-    StackOffset: ::ULONG64,
-    BackingStoreOffset: ::ULONG64,
-    FuncTableEntry: ::ULONG64,
-    Params: [::ULONG64; 4],
-    Reserved: [::ULONG64; 5],
-    Virtual: ::BOOL,
-    Reserved2: ::ULONG,
-}}
-pub type PIMAGEHLP_STACK_FRAME = *mut IMAGEHLP_STACK_FRAME;
-pub type IMAGEHLP_CONTEXT = ::VOID;
-pub type PIMAGEHLP_CONTEXT = *mut ::VOID;
-pub type PSYMBOL_INFOW = *mut SYMBOL_INFOW;
-pub type PSYM_ENUMERATESYMBOLS_CALLBACKW = Option<unsafe extern "system" fn(
-    pSymInfo: PSYMBOL_INFOW, SymbolSize: ::ULONG, UserContext: ::PVOID,
-) -> ::BOOL>;
 STRUCT!{struct IMAGEHLP_SYMBOL64 {
     SizeOfStruct: ::DWORD,
     Address: ::DWORD64,
@@ -369,6 +381,35 @@ STRUCT!{struct IMAGEHLP_SYMBOL64 {
     Name: [::CHAR; 1],
 }}
 pub type PIMAGEHLP_SYMBOL64 = *mut IMAGEHLP_SYMBOL64;
+#[repr(C)]
+pub struct IMAGEHLP_MODULEW64 {
+    pub SizeOfStruct: ::DWORD,
+    pub BaseOfImage: ::DWORD64,
+    pub ImageSize: ::DWORD,
+    pub TimeDateStamp: ::DWORD,
+    pub CheckSum: ::DWORD,
+    pub NumSyms: ::DWORD,
+    pub SymType: ::SYM_TYPE,
+    pub ModuleName: [::WCHAR; 32],
+    pub ImageName: [::WCHAR; 256],
+    pub LoadedImageName: [::WCHAR; 256],
+    pub LoadedPdbName: [::WCHAR; 256],
+    pub CVSig: ::DWORD,
+    pub CVData: [::WCHAR; ::MAX_PATH * 3],
+    pub PdbSig: ::DWORD,
+    pub PdbSig70: ::GUID,
+    pub PdbAge: ::DWORD,
+    pub PdbUnmatched: ::BOOL,
+    pub DbgUnmatched: ::BOOL,
+    pub LineNumbers: ::BOOL,
+    pub GlobalSymbols: ::BOOL,
+    pub TypeInfo: ::BOOL,
+    pub SourceIndexed: ::BOOL,
+    pub Publics: ::BOOL,
+    pub MachineType: ::DWORD,
+    pub Reserved: ::DWORD,
+}
+pub type PIMAGEHLP_MODULEW64 = *mut IMAGEHLP_MODULEW64;
 STRUCT!{struct IMAGEHLP_LINEW64 {
     SizeOfStruct: ::DWORD,
     Key: ::PVOID,
@@ -409,3 +450,76 @@ pub const SYMOPT_DISABLE_FAST_SYMBOLS: ::DWORD = 0x10000000;
 pub const SYMOPT_DISABLE_SYMSRV_TIMEOUT: ::DWORD = 0x20000000;
 pub const SYMOPT_DISABLE_SRVSTAR_ON_STARTUP: ::DWORD = 0x40000000;
 pub const SYMOPT_DEBUG: ::DWORD = 0x80000000;
+STRUCT!{struct SYMBOL_INFOW {
+    SizeOfStruct: ::ULONG,
+    TypeIndex: ::ULONG,
+    Reserved: [::ULONG64; 2],
+    Index: ::ULONG,
+    Size: ::ULONG,
+    ModBase: ::ULONG64,
+    Flags: ::ULONG,
+    Value: ::ULONG64,
+    Address: ::ULONG64,
+    Register: ::ULONG,
+    Scope: ::ULONG,
+    Tag: ::ULONG,
+    NameLen: ::ULONG,
+    MaxNameLen: ::ULONG,
+    Name: [::WCHAR; 1],
+}}
+pub type PSYMBOL_INFOW = *mut SYMBOL_INFOW;
+STRUCT!{struct IMAGEHLP_STACK_FRAME {
+    InstructionOffset: ::ULONG64,
+    ReturnOffset: ::ULONG64,
+    FrameOffset: ::ULONG64,
+    StackOffset: ::ULONG64,
+    BackingStoreOffset: ::ULONG64,
+    FuncTableEntry: ::ULONG64,
+    Params: [::ULONG64; 4],
+    Reserved: [::ULONG64; 5],
+    Virtual: ::BOOL,
+    Reserved2: ::ULONG,
+}}
+pub type PIMAGEHLP_STACK_FRAME = *mut IMAGEHLP_STACK_FRAME;
+pub type IMAGEHLP_CONTEXT = ::VOID;
+pub type PIMAGEHLP_CONTEXT = *mut ::VOID;
+pub type PSYM_ENUMERATESYMBOLS_CALLBACKW = Option<unsafe extern "system" fn(
+    pSymInfo: PSYMBOL_INFOW, SymbolSize: ::ULONG, UserContext: ::PVOID,
+) -> ::BOOL>;
+ENUM!{enum IMAGEHLP_SYMBOL_TYPE_INFO {
+    TI_GET_SYMTAG,
+    TI_GET_SYMNAME,
+    TI_GET_LENGTH,
+    TI_GET_TYPE,
+    TI_GET_TYPEID,
+    TI_GET_BASETYPE,
+    TI_GET_ARRAYINDEXTYPEID,
+    TI_FINDCHILDREN,
+    TI_GET_DATAKIND,
+    TI_GET_ADDRESSOFFSET,
+    TI_GET_OFFSET,
+    TI_GET_VALUE,
+    TI_GET_COUNT,
+    TI_GET_CHILDRENCOUNT,
+    TI_GET_BITPOSITION,
+    TI_GET_VIRTUALBASECLASS,
+    TI_GET_VIRTUALTABLESHAPEID,
+    TI_GET_VIRTUALBASEPOINTEROFFSET,
+    TI_GET_CLASSPARENTID,
+    TI_GET_NESTED,
+    TI_GET_SYMINDEX,
+    TI_GET_LEXICALPARENT,
+    TI_GET_ADDRESS,
+    TI_GET_THISADJUST,
+    TI_GET_UDTKIND,
+    TI_IS_EQUIV_TO,
+    TI_GET_CALLING_CONVENTION,
+    TI_IS_CLOSE_EQUIV_TO,
+    TI_GTIEX_REQS_VALID,
+    TI_GET_VIRTUALBASEOFFSET,
+    TI_GET_VIRTUALBASEDISPINDEX,
+    TI_GET_IS_REFERENCE,
+    TI_GET_INDIRECTVIRTUALBASECLASS,
+    TI_GET_VIRTUALBASETABLETYPE,
+    IMAGEHLP_SYMBOL_TYPE_INFO_MAX,
+}}

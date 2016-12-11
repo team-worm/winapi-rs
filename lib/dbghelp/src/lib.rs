@@ -202,7 +202,9 @@ extern "system" {
     // pub fn SymGetModuleInfo();
     // pub fn SymGetModuleInfo64();
     // pub fn SymGetModuleInfoW();
-    // pub fn SymGetModuleInfoW64();
+    pub fn SymGetModuleInfoW64(
+        hProcess: HANDLE, dwAddr: DWORD64, ModuleInfo: PIMAGEHLP_MODULEW64
+    ) -> BOOL;
     // pub fn SymGetOmaps();
     pub fn SymGetOptions() -> DWORD;
     // pub fn SymGetScope();
@@ -231,7 +233,10 @@ extern "system" {
     // pub fn SymGetSymbolFileW();
     // pub fn SymGetTypeFromName();
     // pub fn SymGetTypeFromNameW();
-    // pub fn SymGetTypeInfo();
+    pub fn SymGetTypeInfo(
+        hProcess: HANDLE, ModBase: DWORD64, TypeId: ULONG, GetType: IMAGEHLP_SYMBOL_TYPE_INFO,
+        pInfo: PVOID
+    ) -> BOOL;
     // pub fn SymGetTypeInfoEx();
     // pub fn SymGetUnwindInfo();
     // pub fn SymInitialize();
